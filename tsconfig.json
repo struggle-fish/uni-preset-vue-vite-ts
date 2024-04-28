@@ -9,8 +9,9 @@
     "lib": ["esnext", "dom"],
     "types": [
       "@dcloudio/types",
-      "@types/wechat-miniprogram",
-      "@uni-helper/uni-app-types"
+      "miniprogram-api-typings",
+      "@uni-helper/uni-app-types",
+      "@uni-helper/uni-ui-types"
     ]
   },
   "vueCompilerOptions": {

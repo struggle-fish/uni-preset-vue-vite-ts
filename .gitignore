@@ -12,6 +12,8 @@ node_modules
 dist
 *.local
 
+dist
+.hbuilderx
 # Editor directories and files
 .idea
 *.suo
