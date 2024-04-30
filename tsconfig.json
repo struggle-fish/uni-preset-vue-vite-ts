@@ -1,12 +1,15 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
     "lib": ["esnext", "dom"],
+    "ignoreDeprecations": ["importNotUsedAsValues"],
+    "verbatimModuleSyntax": true,
     "types": [
       "@dcloudio/types",
       "miniprogram-api-typings",

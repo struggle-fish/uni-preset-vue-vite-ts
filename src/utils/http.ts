@@ -76,10 +76,6 @@ export const http = <T>(options: UniApp.RequestOptions) => {
           reject(res)
         } else {
           // 其他错误
-          uni.showToast({
-            icon: 'none',
-            title: (res.data as Data<T>).msg || '请求错误',
-          })
           reject(res)
         }
       },

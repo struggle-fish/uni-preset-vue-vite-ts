@@ -1,45 +1,97 @@
 <template>
-  <view class="content">
-    <image class="logo" src="/static/logo.png" />
-    <view class="text-area">
-      <text class="title">{{ title }}</text>
-    </view>
+  <CustomNavbar/>
+  <scroll-view class="scroll-view" 
+    refresher-enabled
+    scroll-y
+    :refresher-triggered="isTrigger"
+    @refresherrefresh="onRefresherrefresh"
+    @scrolltolower="onScrolltolower">
 
-    <uni-card title="基础卡片" sub-title="副标题" extra="额外信息" thumbnail="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png">
-      <text>这是一个带头像和双标题的基础卡片，此示例展示了一个完整的卡片。</text>
-    </uni-card>
-  </view>
+    <PageSkeleton v-if="isLoading"/>
+    <template v-else>
+      <XtxSwiper :list="bannerList"/>
+      <CategoryPanel :list="categoryList"/>
+      <HotPanel :list="hotList"/>
+      <XtxGuess ref="guessRef"/>
+    </template>
+  </scroll-view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-const title = ref('Hello')
+import type { BannerItem, CategoryItem, HotItem } from '@/types/home';
+import XtxSwiper from '@/components/XtxSwiper.vue';
+import CustomNavbar from './components/CustomNavbar.vue'
+import CategoryPanel from './components/CategoryPanel.vue';
+import PageSkeleton from './components/PageSkeleton.vue';
+import HotPanel from './components/HotPanel.vue';
+import { getHomeBannerAPI, getHomeCatgoryAPI, getHomeHotAPI } from '@/services/home';
+import { onLoad } from '@dcloudio/uni-app';
+import { ref } from 'vue';
+import type { XtxGuessInstance } from '@/types/components';
+
+
+const bannerList = ref<BannerItem[]>([])
+const getHomeBannerData = async () => {
+  const res = await getHomeBannerAPI()
+  bannerList.value = res.result
+}
+const categoryList = ref<CategoryItem[]>([])
+const getHomeCatgoryData = async () => {
+  try {
+    const res = await getHomeCatgoryAPI()
+    categoryList.value = res.result
+  } catch(error) {
+    console.log(error, '错误什么')
+    uni.showToast({
+      icon: 'none',
+      title: '请求错误',
+    })
+  }
+}
+
+const hotList = ref<HotItem[]>([])
+const getHomeHotData = async () => {
+  const res = await getHomeHotAPI() 
+  hotList.value = res.result
+}
+// 组件实例
+const guessRef = ref<XtxGuessInstance>()
+const onScrolltolower = () => {
+  guessRef.value?.getMore()
+}
+
+// 下拉刷新
+const isTrigger = ref(false)
+const onRefresherrefresh = async () => {
+  isTrigger.value = true
+  // await getHomeBannerData()
+  // await getHomeCatgoryData()
+  // await getHomeHotData()
+  guessRef.value?.resetData()
+  await Promise.all([getHomeBannerData(), getHomeCatgoryData(), getHomeHotData(), guessRef.value?.getMore()])
+  
+  isTrigger.value = false
+}
+const isLoading = ref(false)
+onLoad(async () => {
+  isLoading.value = true
+  await Promise.all([
+    getHomeBannerData(),
+    getHomeCatgoryData(),
+    getHomeHotData()])
+  isLoading.value = false
+})
 </script>
 
-<style>
-.content {
+<style lang="scss" >
+page {
+  background-color: #f7f7f7;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
+.scroll-view{
+  flex: 1;
+  height: 100vh;
 }
 </style>
