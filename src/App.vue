@@ -10,4 +10,8 @@ onHide(() => {
   console.log("App Hide");
 });
 </script>
-<style></style>
+<style lang="scss">
+// 字体图标
+@import '@/styles/base.scss';
+@import '@/styles/fonts.scss';
+</style>
