@@ -5,7 +5,7 @@
     scroll-y
     :refresher-triggered="isTrigger"
     @refresherrefresh="onRefresherrefresh"
-    @scrolltolower="onScrolltolower">
+    @scrolltolower="onScrolltoLower">
 
     <PageSkeleton v-if="isLoading"/>
     <template v-else>
@@ -28,6 +28,7 @@ import { getHomeBannerAPI, getHomeCatgoryAPI, getHomeHotAPI } from '@/services/h
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 import type { XtxGuessInstance } from '@/types/components';
+import { useGuessList } from '@/composables';
 
 
 const bannerList = ref<BannerItem[]>([])
@@ -55,10 +56,7 @@ const getHomeHotData = async () => {
   hotList.value = res.result
 }
 // 组件实例
-const guessRef = ref<XtxGuessInstance>()
-const onScrolltolower = () => {
-  guessRef.value?.getMore()
-}
+const { guessRef, onScrolltoLower } = useGuessList()
 
 // 下拉刷新
 const isTrigger = ref(false)
