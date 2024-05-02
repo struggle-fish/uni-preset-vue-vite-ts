@@ -1,11 +1,7 @@
-<script setup lang="ts">
-//
-</script>
-
 <template>
   <view class="viewport">
     <!-- 列表1 -->
-    <view class="list" v-if="true">
+    <view class="list" v-if="memeberStore.profile">
       <navigator url="/pagesMember/address/address" hover-class="none" class="item arrow">
         我的收货地址
       </navigator>
@@ -21,12 +17,26 @@
       <navigator hover-class="none" class="item arrow" url=" ">关于小兔鲜儿</navigator>
     </view>
     <!-- 操作按钮 -->
-    <view class="action">
+    <view class="action" @click="onLogout" v-if="memeberStore.profile">
       <view class="button">退出登录</view>
     </view>
   </view>
 </template>
-
+<script setup lang="ts">
+  import { useMemberStore } from '@/stores';
+  const memeberStore = useMemberStore()
+  const onLogout = () => {
+    uni.showModal({
+      content: '是否退出登录',
+      success:(res)=>{
+        if (res.confirm) {
+          memeberStore.clearProfile()
+          uni.navigateBack()
+        }
+      },
+    })
+  }
+</script>
 <style lang="scss">
 page {
   background-color: #f4f4f4;

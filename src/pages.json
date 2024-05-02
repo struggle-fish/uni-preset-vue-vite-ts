@@ -94,12 +94,19 @@
 					"style": {
 						"navigationBarTitleText": "设置"
 					}
+				},
+				{
+					"path": "profile/profile",
+					"style": {
+						"navigationStyle": "custom",
+						"navigationBarTitleText": "个人信息"
+					}
 				}
 			]
 		}
 	],
 	"preloadRule": {
-		"pages/my/my": {
+		"pages/my/my": { 
 			"network": "all",
 			"packages": [
 				"pagesMember"
