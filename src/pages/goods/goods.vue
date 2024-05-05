@@ -13,6 +13,7 @@
   }"
   @add-cart="onAddCart"
   ref="skuPopupRef"
+  @buy-now="onBuyNow"
   v-model="isShowSku"/>
   
   <scroll-view scroll-y class="viewport">
@@ -244,6 +245,13 @@ import { postMemberCartAPI } from '@/services/cart';
       title: '添加成功'
     })
     isShowSku.value = false
+  }
+
+
+  const onBuyNow = (ev: SkuPopupEvent) => {
+    uni.navigateTo({
+      url: `/pagesOrder/create/create?skuId=${ev._id}&count=${ev.buy_num}`
+    })
   }
   onLoad(() => {
     getGoodsByIdData()

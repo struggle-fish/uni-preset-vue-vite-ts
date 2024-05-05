@@ -170,10 +170,7 @@
       })
       return
     }
-    uni.showToast({
-      title: '等待完成',
-      icon: 'success',
-    })
+    uni.navigateTo({ url: '/pagesOrder/create/create' })
   }
   onShow(() => {
     if (memberStore.profile) {

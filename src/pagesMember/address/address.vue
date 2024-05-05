@@ -5,8 +5,9 @@
       <view v-if="addressList.length" class="address">
         <uni-swipe-action class="address-list">
           <!-- 收货地址项 -->
-          <uni-swipe-action-item class="item" v-for="item in addressList" :key="item.id">
-            <view class="item-content">
+          <uni-swipe-action-item 
+            class="item" v-for="item in addressList" :key="item.id">
+            <view class="item-content" @click="onChangeAddress(item)">
               <view class="user">
                 {{ item.receiver }}
                 <text class="contact">{{ item.contact }}</text>
@@ -16,6 +17,7 @@
               <navigator
                 class="edit"
                 hover-class="none"
+                @click.stop="() => {}"
                 :url="`/pagesMember/address-form/address-form?id=${item.id}`"
               >
                 修改
@@ -44,6 +46,7 @@
   import { onShow } from '@dcloudio/uni-app';
   import type { AddressItem } from '../../types/address';
   import { ref } from 'vue';
+import { useAddressStore } from '@/stores/modules/address';
 
   const addressList = ref<AddressItem[]>([])
   const getMemberAddressData = async() => {
@@ -60,6 +63,12 @@
         }
       },
     })
+  }
+
+  const onChangeAddress = (item: AddressItem) => {
+    const addressStore = useAddressStore()
+    addressStore.changeSelectedAddress(item)
+    uni.navigateBack()
   }
   
   onShow(() => {
