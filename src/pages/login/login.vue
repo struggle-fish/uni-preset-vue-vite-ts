@@ -70,7 +70,8 @@ import { onLoad } from '@dcloudio/uni-app';
       title: '登录成功'
     })
     setTimeout(() => {
-      uni.switchTab({ url: '/pages/my/my' })
+      uni.navigateBack()
+      // uni.switchTab({ url: '/pages/my/my' })
     }, 500)
   }
 </script>
